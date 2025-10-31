@@ -7,10 +7,6 @@
 			<log loggingLevel="ERROR" message="${exception.getMessage()} ${exception}" />
 		</onException>
 
-<!--		<pollEnrich>-->
-<!--			<constant>file://C:/work/rgsip/MessageSender/src/main/resources/body.xml</constant>-->
-<!--		</pollEnrich>-->
-
 		<log loggingLevel="INFO" message="invoke timer" />
 		<setHeader headerName="testHeader">
 			<method ref="uuidGenerator" method="getUuid"/>
