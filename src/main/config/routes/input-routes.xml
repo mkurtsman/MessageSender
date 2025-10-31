@@ -18,6 +18,6 @@
 		<setBody>
 			<constant>file:C:/Users/MKurtsman/work/messagesender/src/main/resources?filename=body.xml</constant>
 		</setBody>
-		<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;getUuid"/>
+		<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
 	</route>
 </routes>
