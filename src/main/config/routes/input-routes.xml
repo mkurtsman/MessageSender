@@ -7,17 +7,17 @@
 			<log loggingLevel="ERROR" message="${exception.getMessage()} ${exception}" />
 		</onException>
 
-		<pollEnrich>
-			<constant>file://C:/work/rgsip/MessageSender/src/main/resources/body.xml</constant>
-		</pollEnrich>
+<!--		<pollEnrich>-->
+<!--			<constant>file://C:/work/rgsip/MessageSender/src/main/resources/body.xml</constant>-->
+<!--		</pollEnrich>-->
 
+		<log loggingLevel="INFO" message="invoke timer" />
 		<setHeader headerName="testHeader">
-			<simple>${uuid(random)}</simple>
+			<method ref="uuidGenerator" method="getUuid"/>
 		</setHeader>
 		<setBody>
-			<constant>file:C:\work\rgsip\MessageSender\src\main\resources\body.xml</constant>
+			<constant>file:C:/Users/MKurtsman/work/messagesender/src/main/resources?filename=body.xml</constant>
 		</setBody>
-		<log loggingLevel="INFO" message="invoke timer" />
-		<to uri="rabbitmq://{{rabbitmq.hosts}}/{{queue.exchange}}?queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true"/>
+		<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;getUuid"/>
 	</route>
 </routes>
