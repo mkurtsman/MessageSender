@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://camel.apache.org/schema/spring">
+	<route id="sendRoute">
+		<from uri="timer://sendTimer?fixedRate=true&amp;period={{timer.period}}"/>
+		<onException>
+			<exception>java.lang.Exception</exception>
+			<log loggingLevel="ERROR" message="${exception.getMessage()} ${exception}" />
+		</onException>
+
+		<pollEnrich>
+			<constant>file://C:/work/rgsip/MessageSender/src/main/resources/body.xml</constant>
+		</pollEnrich>
+
+		<setHeader headerName="testHeader">
+			<simple>${uuid(random)}</simple>
+		</setHeader>
+		<setBody>
+			<constant>file:C:\work\rgsip\MessageSender\src\main\resources\body.xml</constant>
+		</setBody>
+		<log loggingLevel="INFO" message="invoke timer" />
+		<to uri="rabbitmq://{{rabbitmq.hosts}}/{{queue.exchange}}?queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true"/>
+	</route>
+</routes>
