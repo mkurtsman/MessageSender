@@ -9,14 +9,14 @@
 	<description>Message sender</description>
 
 	<properties>
-		<camel.version>2.24.1</camel.version>
+		<camel.version>3.18.2</camel.version>
 		<cxf.version>3.2.9</cxf.version>
-		<java.version>1.8</java.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<java.version>17</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<springboot.version>2.2.0.RELEASE</springboot.version>
+		<springboot.version>2.7.6</springboot.version>
 		<webjars-locator.version>0.36</webjars-locator.version>
 	</properties>
 
@@ -45,54 +45,6 @@
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-netty4-starter</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-http4-starter</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-netty4-http-starter</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>org.apache.camel</groupId>-->
-<!--			<artifactId>camel-jms-starter</artifactId>-->
-<!--			<version>${camel.version}</version>-->
-<!--		</dependency>-->
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jms</artifactId>
-			<version>5.2.0.RELEASE</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-saxon-starter</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-sql-starter</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>com.rabbitmq</groupId>-->
-<!--			<artifactId>amqp-client</artifactId>-->
-<!--			<version>6.0.1-CUSTOM</version>-->
-<!--		</dependency>-->
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-rabbitmq</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
@@ -110,7 +62,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.camel</groupId>
+			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-jms-starter</artifactId>
 			<version>${camel.version}</version>
 			<exclusions>
@@ -121,18 +73,13 @@
 			</exclusions>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-swagger-java-starter</artifactId>
-			<version>${camel.version}</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/org.webjars/swagger-ui -->
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>swagger-ui</artifactId>
 			<version>3.22.2</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

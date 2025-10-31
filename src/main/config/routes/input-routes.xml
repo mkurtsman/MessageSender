@@ -8,7 +8,7 @@
 		</onException>
 
 		<log loggingLevel="INFO" message="invoke timer" />
-		<setHeader headerName="testHeader">
+		<setHeader name="testHeader">
 			<method ref="uuidGenerator" method="getUuid"/>
 		</setHeader>
 		<setBody>
