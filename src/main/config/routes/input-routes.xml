@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://camel.apache.org/schema/spring">
-	<route id="sendRoute">
+	<route id="sendRoute" autoStartup="true">
 		<from uri="timer://sendTimer?fixedRate=true&amp;period={{timer.period}}"/>
 		<onException>
 			<exception>java.lang.Exception</exception>
@@ -11,6 +11,7 @@
 		<setHeader name="testHeader">
 			<method ref="uuidGenerator" method="getUuid"/>
 		</setHeader>
+
 		<setBody>
 			<constant>file:C:/Users/MKurtsman/work/messagesender/src/main/resources?filename=body.xml</constant>
 		</setBody>
