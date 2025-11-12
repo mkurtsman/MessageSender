@@ -23,11 +23,10 @@
 			<setHeader name="CorrelationId">
 				<method ref="uuidGenerator" method="getUuid"/>
 			</setHeader>
-			<log loggingLevel="INFO" message="send message #{header.CorrelationId} number {exchangeProperty.counter}" />
+			<log loggingLevel="INFO" message="send message ${header.CorrelationId} number ${exchangeProperty.counter}" />
 			<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
 			<setProperty name="counter">
-				<ognl>${exchangeProperty.counter} + 1</ognl>
-
+				<method ref="math" method="increment(${exchangeProperty.counter})"/>
 			</setProperty>
 		</loop>
 	    <stop/>
