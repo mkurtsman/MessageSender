@@ -6,6 +6,7 @@
 			<exception>java.lang.Exception</exception>
 			<log loggingLevel="ERROR" message="${exception.getMessage()} ${exception}" />
 		</onException>
+		<threads maxQueueSize="{{threadsCount}}"/>
 
 		<log loggingLevel="INFO" message="invoke timer" />
 		<setHeader name="testHeader">
@@ -18,17 +19,46 @@
 		<setProperty name="counter">
 			<simple resultType="Long">0</simple>
 		</setProperty>
+
+		<setHeader name="Originator">
+			<constant>KIAS</constant>
+		</setHeader>
+
+		<setHeader name="NotificationRequired">
+			<constant>false</constant>
+		</setHeader>
+
+		<setHeader name="ResponseRequired">
+			<constant>true</constant>
+		</setHeader>
+
+		<setHeader name="MessageType">
+			<constant>Request</constant>
+		</setHeader>
+
+		<setHeader name="MessageCode">
+			<constant>AgencyContractUpdate</constant>
+		</setHeader>
+
 		<loop doWhile="true">
 			<simple>${exchangeProperty.counter} &lt; {{maxcount}}</simple>
 			<setHeader name="CorrelationId">
-				<method ref="uuidGenerator" method="getUuid"/>
+				<simple>{{CorrelationId}}</simple>
 			</setHeader>
+			
+			<filter>
+				<simple>${correlationId} == null</simple>
+				<setHeader name="CorrelationId">
+					<method ref="uuidGenerator" method="getUuid"/>
+				</setHeader>				
+			</filter>
+
 			<log loggingLevel="INFO" message="send message ${header.CorrelationId} number ${exchangeProperty.counter}" />
 			<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
 			<setProperty name="counter">
 				<method ref="math" method="increment(${exchangeProperty.counter})"/>
 			</setProperty>
 		</loop>
-	    <stop/>
+
 	</route>
 </routes>
