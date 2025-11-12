@@ -11,10 +11,23 @@
 		<setHeader name="testHeader">
 			<method ref="uuidGenerator" method="getUuid"/>
 		</setHeader>
-
 		<setBody>
 			<constant>file:C:/Users/MKurtsman/work/messagesender/src/main/resources?filename=body.xml</constant>
 		</setBody>
-		<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
+
+		<setProperty name="counter">
+			<simple resultType="Long">0</simple>
+		</setProperty>
+		<loop doWhile="true">
+			<simple>${exchangeProperty.counter} &lt; {{maxcount}}</simple>
+			<setHeader name="CorrelationId">
+				<method ref="uuidGenerator" method="getUuid"/>
+			</setHeader>
+			<log loggingLevel="INFO" message="send message #{header.CorrelationId} number {exchangeProperty.counter}" />
+			<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
+			<setProperty name="counter">
+				<simple resultType="Long">${exchangeProperty.counter} + 1</simple>
+			</setProperty>
+		</loop>
 	</route>
 </routes>
