@@ -26,7 +26,8 @@
 			<log loggingLevel="INFO" message="send message #{header.CorrelationId} number {exchangeProperty.counter}" />
 			<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
 			<setProperty name="counter">
-				<simple resultType="Long">${exchangeProperty.counter} + 1</simple>
+				<ognl>${exchangeProperty.counter} + 1</ognl>
+
 			</setProperty>
 		</loop>
 	</route>
