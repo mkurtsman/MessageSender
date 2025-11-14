@@ -27,11 +27,13 @@ public  class RmqCommon {
 
     public RabbitMQComponent rabbitMQComponent() {
         RabbitMQComponent rabbitMQComponent = new RabbitMQComponent();
-        log.debug("rmq settings: {}", this);
+        log.debug("rmq settings: {}", cfg);
 //        rabbitMQComponent.setConnectionFactory(connectionFactory);
         rabbitMQComponent.setAddresses(cfg.addresses);
         rabbitMQComponent.setHostname(cfg.hostname);
-        rabbitMQComponent.setPortNumber(cfg.port);
+        if(cfg.port != null) {
+            rabbitMQComponent.setPortNumber(cfg.port);
+        }
         rabbitMQComponent.setUsername(cfg.username);
         rabbitMQComponent.setPassword(cfg.password);
         rabbitMQComponent.setVhost(cfg.virtualHost);
