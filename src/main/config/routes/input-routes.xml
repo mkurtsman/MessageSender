@@ -1,6 +1,7 @@
 <routes xmlns="http://camel.apache.org/schema/spring">
 	<route id="sendRoute" autoStartup="true">
 		<from uri="timer://sendTimer?fixedRate=true&amp;period={{timer.period}}"/>
+<!--		<from uri="direct:start"/>-->
 		<onException>
 			<exception>java.lang.Exception</exception>
 			<log loggingLevel="ERROR" message="${exception.getMessage()} ${exception}" />

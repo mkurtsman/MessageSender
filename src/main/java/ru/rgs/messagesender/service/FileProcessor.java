@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 public class FileProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
-        Path path = Paths.get("C:\\Users\\MKurtsman\\work\\messagesender\\src\\main\\resources\\body.xml");
+        Path path = Paths.get("/home/misha/IdeaProjects/MessageSender/src/main/resources/body.xml");
         String body = Files.readString(path);
 
         exchange.getIn().setBody(body, String.class);
