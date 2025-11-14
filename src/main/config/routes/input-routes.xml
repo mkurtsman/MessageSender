@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <routes xmlns="http://camel.apache.org/schema/spring">
 	<route id="sendRoute" autoStartup="true">
 		<from uri="timer://sendTimer?fixedRate=true&amp;period={{timer.period}}"/>
@@ -6,15 +5,18 @@
 			<exception>java.lang.Exception</exception>
 			<log loggingLevel="ERROR" message="${exception.getMessage()} ${exception}" />
 		</onException>
+
+
+		<process ref="fileProcessor" />
+
+		<convertBodyTo type="String" />
+
 		<threads maxQueueSize="{{threadsCount}}"/>
 
 		<log loggingLevel="INFO" message="invoke timer" />
 		<setHeader name="testHeader">
 			<method ref="uuidGenerator" method="getUuid"/>
 		</setHeader>
-		<setBody>
-			<constant>file:C:/Users/MKurtsman/work/messagesender/src/main/resources?filename=body.xml</constant>
-		</setBody>
 
 		<setProperty name="counter">
 			<simple resultType="Long">0</simple>
@@ -40,18 +42,25 @@
 			<constant>AgencyContractUpdate</constant>
 		</setHeader>
 
+		<setProperty name="CorrelationId">
+			<simple>{{correlationId:null}}</simple>
+		</setProperty>
+
 		<loop doWhile="true">
 			<simple>${exchangeProperty.counter} &lt; {{maxcount}}</simple>
-			<setHeader name="CorrelationId">
-				<simple>{{CorrelationId}}</simple>
-			</setHeader>
-			
-			<filter>
-				<simple>${correlationId} == null</simple>
-				<setHeader name="CorrelationId">
-					<method ref="uuidGenerator" method="getUuid"/>
-				</setHeader>				
-			</filter>
+			<choice>
+				<when>
+					<simple>${exchangeProperty.CorrelationId} == null || ${exchangeProperty.CorrelationId} == 'null'</simple>
+					<setHeader name="CorrelationId">
+						<method ref="uuidGenerator" method="getUuid"/>
+					</setHeader>
+				</when>
+				<otherwise>
+					<setHeader name="CorrelationId">
+						<simple>${exchangeProperty.CorrelationId}</simple>
+					</setHeader>
+				</otherwise>
+			</choice>
 
 			<log loggingLevel="INFO" message="send message ${header.CorrelationId} number ${exchangeProperty.counter}" />
 			<to uri="rabbitmq:{{queue.exchange}}?addresses={{rabbitmq.hosts}}&amp;queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;username={{rabbitmq.username}}&amp;password={{rabbitmq.password}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
@@ -59,6 +68,7 @@
 				<method ref="math" method="increment(${exchangeProperty.counter})"/>
 			</setProperty>
 		</loop>
-
 	</route>
+
+
 </routes>
