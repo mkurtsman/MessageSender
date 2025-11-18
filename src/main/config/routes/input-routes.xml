@@ -63,11 +63,17 @@
 				</otherwise>
 			</choice>
 
+			<doTry>
 			<log loggingLevel="INFO" message="send message ${header.CorrelationId} number ${exchangeProperty.counter}" />
-			<to uri="rabbitmq:{{queue.exchange}}?queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;exchangePattern=InOnly&amp;declare=false&amp;guaranteedDeliveries=true&amp;automaticRecoveryEnabled=true"/>
+			<to uri="rabbitmq:{{queue.exchange}}?queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;exchangePattern=InOnly"/>
 			<setProperty name="counter">
 				<method ref="math" method="increment(${exchangeProperty.counter})"/>
 			</setProperty>
+				<doCatch>
+					<exception>java.lang.Exception</exception>
+					<log message="${exception}" loggingLevel="ERROR" />
+				</doCatch>
+			</doTry>
 		</loop>
 	</route>
 

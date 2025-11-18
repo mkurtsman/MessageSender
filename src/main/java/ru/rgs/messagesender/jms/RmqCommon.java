@@ -38,6 +38,9 @@ public  class RmqCommon {
         rabbitMQComponent.setPassword(cfg.password);
         rabbitMQComponent.setVhost(cfg.virtualHost);
         rabbitMQComponent.setAutomaticRecoveryEnabled(true);
+        rabbitMQComponent.setAutoAck(true);
+        rabbitMQComponent.setGuaranteedDeliveries(true);
+        rabbitMQComponent.setDeclare(false);
         return rabbitMQComponent;
     }
 
