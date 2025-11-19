@@ -12,9 +12,7 @@
 
 		<convertBodyTo type="String" />
 
-		<threads maxQueueSize="{{threadsCount}}"/>
-
-		<log loggingLevel="INFO" message="invoke timer" />
+    	<log loggingLevel="INFO" message="invoke timer" />
 		<setHeader name="testHeader">
 			<method ref="uuidGenerator" method="getUuid"/>
 		</setHeader>
@@ -47,8 +45,11 @@
 			<simple>{{correlationId:null}}</simple>
 		</setProperty>
 
+		<log message="correlationId = ${exchangeProperty.CorrelationId}"/>
+
 		<loop doWhile="true">
 			<simple>${exchangeProperty.counter} &lt; {{maxcount}}</simple>
+
 			<choice>
 				<when>
 					<simple>${exchangeProperty.CorrelationId} == null || ${exchangeProperty.CorrelationId} == 'null'</simple>
@@ -66,13 +67,16 @@
 			<doTry>
 			<log loggingLevel="INFO" message="send message ${header.CorrelationId} number ${exchangeProperty.counter}" />
 			<to uri="rabbitmq:{{queue.exchange}}?queue={{queue.name}}&amp;routingKey={{queue.routingKey}}&amp;exchangePattern=InOnly"/>
-			<setProperty name="counter">
-				<method ref="math" method="increment(${exchangeProperty.counter})"/>
-			</setProperty>
+
 				<doCatch>
 					<exception>java.lang.Exception</exception>
-					<log message="${exception}" loggingLevel="ERROR" />
+					<log message=" header ${headers.correlationId} ${exception}" loggingLevel="ERROR" />
 				</doCatch>
+				<doFinally>
+					<setProperty name="counter">
+						<method ref="math" method="increment(${exchangeProperty.counter})"/>
+					</setProperty>
+				</doFinally>
 			</doTry>
 		</loop>
 	</route>
